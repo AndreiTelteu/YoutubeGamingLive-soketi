@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: soketi
+  namespace: youtubegaminglive
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - youtubegaming.live
+    secretName: youtubegaming-tls
+  rules:
+    - host: youtubegaming.live
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: soketi
+                port:
+                  number: 8084

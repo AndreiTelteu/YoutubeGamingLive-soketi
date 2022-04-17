@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  soketi
+  namespace: youtubegaminglive
+  labels:
+    app: soketi
+spec:
+  selector:
+    matchLabels:
+      app: soketi
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: soketi
+    spec:
+      containers:
+      - name: soketi
+        image: ghcr.io/andreitelteu/youtubegaminglive-soketi:1.0.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 300m
+            memory: 400Mi
+        livenessProbe:
+          tcpSocket:
+            port: 8084
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8084
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        env:
+        - name: PUSHER_PORT
+          value: "8084"
+        - name: PUSHER_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: soketi
+              key: PUSHER_APP_ID
+        - name: PUSHER_APP_KEY
+          valueFrom:
+            secretKeyRef:
+              name: soketi
+              key: PUSHER_APP_KEY
+        - name: PUSHER_APP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: soketi
+              key: PUSHER_APP_SECRET
+        ports:
+        - name: soketi
+          containerPort: 8084
+      restartPolicy: Always
