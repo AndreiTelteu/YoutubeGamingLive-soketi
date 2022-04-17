@@ -6,15 +6,16 @@ metadata:
   labels:
     app: soketi
 spec:
+  replicas: {{ .Values.replicas }}
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: soketi
-  replicas: 1
   strategy:
+    type: RollingUpdate
     rollingUpdate:
       maxSurge: 25%
       maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:

@@ -2,3 +2,5 @@
 image:
   name: ghcr.io/andreitelteu/youtubegaminglive-soketi
   tag: 1.0.0
+
+replicas: 2
