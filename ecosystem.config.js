@@ -7,9 +7,9 @@ module.exports = {
             env: {
                 DEBUG: "1",
                 PORT: process.env.PUSHER_PORT,
-                ADAPTER_DRIVER: "redis",
-                RATE_LIMITER_DRIVER: "redis",
-                ADAPTER_REDIS_PREFIX: "yt-soketi",
+                // ADAPTER_DRIVER: "redis",
+                // RATE_LIMITER_DRIVER: "redis",
+                // ADAPTER_REDIS_PREFIX: "yt-soketi",
                 // DB_REDIS_HOST: "redis",
                 // DB_REDIS_DB: "2",
                 METRICS_ENABLED: "1",
