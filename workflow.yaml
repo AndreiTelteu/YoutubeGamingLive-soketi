@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: soketi-pipeline
+  labels:
+    workflows.argoproj.io/archive-strategy: "false"
+spec:
+  entrypoint: main
+  serviceAccountName: workflow
+  templates:
+  - name: main
+    steps:
+    - - name: test
+        template: test-hello-world
+    - - name: build-publish
+        template: build
+  - name: test-hello-world
+    container:
+      image: alpine
+      command: [echo]
+      args: ["da dada merge sigurr !"]
+  - name: build
+    container:
+      image: gcr.io/kaniko-project/executor:latest
+      command: [/kaniko/executor]
+      args:
+      - --context=git://github.com/andreitelteu/youtubegaminglive-soketi.git
+      - --destination=ghcr.io/andreitelteu/youtubegaminglive-soketi:1.0.0
+    volumeMounts:
+      - name: kaniko-secret
+        mountPath: /kaniko/.docker
+  volumes:
+    - name: kaniko-secret
+      secret:
+        secretName: regcred
+        items:
+          - key: .dockerconfigjson
+            path: config.json
