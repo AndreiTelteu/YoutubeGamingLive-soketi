@@ -52,6 +52,15 @@ spec:
         env:
         - name: PUSHER_PORT
           value: "8084"
+        - name: REDIS_HOST
+          value: "redis.youtubegaminglive.svc.cluster.local"
+        - name: REDIS_DB
+          value: "2"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis
+              key: redis-password
         - name: PUSHER_APP_ID
           valueFrom:
             secretKeyRef:
