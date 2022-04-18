@@ -6,7 +6,6 @@ metadata:
     workflows.argoproj.io/archive-strategy: "false"
 spec:
   entrypoint: main
-  serviceAccountName: workflow
   templates:
   - name: main
     steps:
@@ -25,10 +24,10 @@ spec:
       command: [/kaniko/executor]
       args:
       - --context=git://github.com/andreitelteu/youtubegaminglive-soketi.git
-      - --destination=ghcr.io/andreitelteu/youtubegaminglive-soketi:1.0.0
-    volumeMounts:
-      - name: kaniko-secret
-        mountPath: /kaniko/.docker
+      - --destination=ghcr.io/andreitelteu/youtubegaminglive-soketi:1.0.1
+      volumeMounts:
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker
   volumes:
     - name: kaniko-secret
       secret:
@@ -36,3 +35,5 @@ spec:
         items:
           - key: .dockerconfigjson
             path: config.json
+  podGC:
+    strategy: OnPodCompletion
