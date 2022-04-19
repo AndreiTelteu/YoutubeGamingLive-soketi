@@ -2,29 +2,28 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   name: soketi-pipeline
+  namespace: argo-events
   labels:
     workflows.argoproj.io/archive-strategy: "false"
+    workflowtemplates.argoproj.io: "soketi-pipeline"
 spec:
-  entrypoint: main
+  entrypoint: build
+  arguments:
+    parameters:
+      - name: tag
+        value: "1.0.0"
   templates:
-  - name: main
-    steps:
-    - - name: test
-        template: test-hello-world
-    - - name: build-publish
-        template: build
-  - name: test-hello-world
-    container:
-      image: alpine
-      command: [echo]
-      args: ["da dada merge sigurr !"]
   - name: build
+    inputs:
+      parameters:
+        - name: tag
+          value: "{{`{{ workflow.parameters.tag }}`}}"
     container:
       image: gcr.io/kaniko-project/executor:latest
       command: [/kaniko/executor]
       args:
-      - --context=git://github.com/andreitelteu/youtubegaminglive-soketi.git
-      - --destination=ghcr.io/andreitelteu/youtubegaminglive-soketi:1.0.1
+      - "--context=git://github.com/andreitelteu/youtubegaminglive-soketi.git"
+      - "--destination=ghcr.io/andreitelteu/youtubegaminglive-soketi:{{`{{ inputs.parameters.tag }}`}}"
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker
