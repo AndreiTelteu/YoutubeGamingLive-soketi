@@ -10,6 +10,12 @@ spec:
     - name: event-sensor
       eventSourceName: youtubegaminglive-webhooks
       eventName: soketi-webhook
+      filters:
+        data:
+          - path: body.ref
+            type: string
+            value:
+              - "refs/heads/master"
   triggers:
     - template:
         name: webhook-workflow-trigger
@@ -33,6 +39,6 @@ spec:
                 arguments:
                   parameters:
                   - name: tag
-                    value: '1.0.2'
+                    value: '1.0.0'
                 podGC:
                   strategy: OnPodCompletion
