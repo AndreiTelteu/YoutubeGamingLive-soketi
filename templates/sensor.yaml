@@ -15,11 +15,11 @@ spec:
         name: webhook-workflow-trigger
         k8s:
           operation: create
-          # parameters:
-          #   - src:
-          #       dependencyName: event-sensor
-          #       dataKey: body.head_commit.id
-          #     dest: spec.arguments.parameters.0.value
+          parameters:
+            - src:
+                dependencyName: event-sensor
+                dataKey: body.repository.pushed_at
+              dest: spec.arguments.parameters.0.value
           source:
             resource:
               apiVersion: argoproj.io/v1alpha1
