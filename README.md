@@ -1,14 +1,11 @@
 
-Secrets encripted using kubeseal
+Soketi configured with pm2 custer configuration and redis backend
 
-```bash
-kubectl -n youtubegaminglive \
-  create secret generic soketi \
-  --dry-run=client \
-  --from-literal PUSHER_APP_ID=foo \
-  --from-literal PUSHER_APP_KEY=bar \
-  --from-literal PUSHER_APP_SECRET=ultrasecret \
-  --output yaml | kubeseal -o yaml | tee secrets.yml
+Works with a load balancer as well.
+
+
+Docker images can be found here: https://github.com/users/AndreiTelteu/packages/container/package/youtubegaminglive-soketi
+
 ```
-
-Actual real values were replaced of course.
+docker pull ghcr.io/andreitelteu/youtubegaminglive-soketi:1651089165
+```
